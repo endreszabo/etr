@@ -3,9 +3,9 @@
 
 from email import Parser
 from email.Utils import parseaddr
-from dmenu import dmenu
+from dmenu import Dmenu
 from re import findall
-from time import sleep, time
+from time import time
 from logger import *
 
 import email
@@ -15,6 +15,10 @@ import pynotify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import *
+
+dmenu=Dmenu(
+    font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
+    lines=10).dmenu
 
 engine = create_engine('mysql://root@localhost/etr', echo=True)
 Session = sessionmaker(engine)
@@ -87,14 +91,12 @@ else:
 	if not partner_id:
 		log(3,'No partner could be found this this maildomain, try to add one')
 		log(3,'Getting partner short name')
-		sleep(0.3)
 		new_partner_shortname=dmenu([mail_domain, '<Append to existing partner>'], prompt='No partner is known with mail domain of %s. Adding one. Enter their short name:' % mail_domain,
 			font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
 			lines=10)
 		new_partner_shortname=new_partner_shortname.strip()
 		if new_partner_shortname=='<Append to existing partner>':
 			partners = session.query(Partner).all()
-			sleep(0.3)
 			existing_partner_name=dmenu(
 				map(lambda l_partner: l_partner.name, partners),
 				prompt='Select partner to append to.',
@@ -111,7 +113,6 @@ else:
 		else:
 			log(3,'Got partner short name', partner_shortname=new_partner_shortname)
 			log(3,'Getting partner full name')
-			sleep(0.5);
 			new_partner_name=dmenu([mail_domain], prompt='Enter new partner full name:',
 				font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
 				lines=10)
@@ -128,7 +129,6 @@ else:
 	if len(name_backwards)>1:
 		name_backwards.reverse()
 		names.append(' '.join(name_backwards))
-	sleep(0.3)
 	new_contact_name=dmenu(names, prompt='%s contact not known, adding one. Name:' % partner.shortname,
 		font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
 		lines=10)
@@ -137,7 +137,6 @@ else:
 		shortname=''.join(map(lambda item: item[0], new_contact_name.split(' ')))
 	else:
 		shortname=new_contact_name
-	sleep(0.3)
 	new_contact_shortname=dmenu([shortname], prompt='Enter shortname for %s:' % new_contact_name,
 		font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
 		lines=10)
@@ -162,7 +161,6 @@ if projects:
 	#	log(3,'Selected only project', project_name=project.name, project_id=project.id)
 	#else:
 		log(3,'More than one project can be found for partner, letting user select one')
-		sleep(0.3)
 		project_name=dmenu(map(lambda project: project.name, projects), prompt='Select a project:',
 			font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
 			lines=10)
@@ -180,7 +178,6 @@ if projects:
 			log(3,'Created project', project_name=project.name, partner_id=partner.id, project_id=project.id)
 else:
 	log(3,'No project could be found this partner, try to add one')
-	sleep(0.3)
 	new_project_name=dmenu([subject], prompt='No projects known for partner %s. Create one. Project name:' % partner.name,
 		font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
 		lines=10)
@@ -193,7 +190,6 @@ else:
 	log(3,'Added project',project_id=project.id)
 
 log(3,'Asking user for new task name', partner_id=partner.id, contact_id=contact.id, project_id=project.id)
-sleep(0.5)
 new_task_name=dmenu([subject], prompt='Task name:',
 	font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
 	lines=10)
@@ -203,7 +199,6 @@ session.add(task)
 session.commit()
 log(3,'Created task', task_name=task.name, task_started=task.started, task_finished=task.finished, task_id=task.id)
 
-sleep(0.5)
 start=dmenu(['Yes','No'], prompt='Start task now?',
 	font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true')
 start=start.strip()
