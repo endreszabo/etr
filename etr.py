@@ -182,7 +182,7 @@ while True:
 	selections=[]
 	if is_task_running():
 		selections.append('Stop task')
-		selections.append('Complete task')
+		selections.append('Finish task')
 	selections.append('Start new task')
 	selections.append('Switch task')
 	selection=dmenu(selections, prompt='ETR Menu:')
