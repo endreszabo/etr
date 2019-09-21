@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 
+from config import *
 from dmenu import Dmenu
 from re import findall
 from time import time
@@ -15,7 +16,7 @@ dmenu=Dmenu(
     font='Inconsolata for Powerline:pixelsize=16:antialias=true:hinting=true',
     lines=10).dmenu
 
-engine = create_engine('mysql://root@localhost/etr', echo=True)
+engine = create_engine(db_connect_string, echo=True)
 Session = sessionmaker(engine)
 session = Session()
 logopen()
