@@ -24,12 +24,12 @@ DROP TABLE IF EXISTS `partners`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `partners` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) COLLATE utf8_hungarian_ci NOT NULL,
-  `shortname` varchar(45) COLLATE utf8_hungarian_ci NOT NULL,
-  `maildomains` varchar(200) COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `name` varchar(45) COLLATE utf8_general_ci NOT NULL,
+  `shortname` varchar(45) COLLATE utf8_general_ci NOT NULL,
+  `maildomains` varchar(200) COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,13 +41,13 @@ DROP TABLE IF EXISTS `projects`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) COLLATE utf8_hungarian_ci NOT NULL,
-  `type` varchar(45) COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `name` varchar(45) COLLATE utf8_general_ci NOT NULL,
+  `type` varchar(45) COLLATE utf8_general_ci DEFAULT NULL,
   `partner_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_projects-partners_idx` (`partner_id`),
   CONSTRAINT `fk_projects-partners` FOREIGN KEY (`partner_id`) REFERENCES `partners` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
@@ -61,14 +61,14 @@ DROP TABLE IF EXISTS `contacts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contacts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) COLLATE utf8_hungarian_ci DEFAULT NULL,
-  `shortname` varchar(15) COLLATE utf8_hungarian_ci DEFAULT NULL,
-  `email` varchar(45) COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `name` varchar(45) COLLATE utf8_general_ci DEFAULT NULL,
+  `shortname` varchar(15) COLLATE utf8_general_ci DEFAULT NULL,
+  `email` varchar(45) COLLATE utf8_general_ci DEFAULT NULL,
   `partner_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_contact_1_idx` (`partner_id`),
   CONSTRAINT `fk_contacts-partners` FOREIGN KEY (`partner_id`) REFERENCES `partners` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `tasks` (
   CONSTRAINT `fk_tasks-contacts` FOREIGN KEY (`contact_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks-partners` FOREIGN KEY (`partner_id`) REFERENCES `partners` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks-projects` FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,11 +108,11 @@ CREATE TABLE `events` (
   `task_id` int(11) NOT NULL,
   `start` int(11) NOT NULL,
   `stop` int(11) DEFAULT NULL,
-  `stop_reason` varchar(45) COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `stop_reason` varchar(45) COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_events-tasks_idx` (`task_id`),
   CONSTRAINT `fk_events-tasks` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,13 +126,13 @@ CREATE TABLE `objects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `event_id` int(11) NOT NULL,
   `create_time` int(11) NOT NULL,
-  `name` varchar(45) COLLATE utf8_hungarian_ci DEFAULT NULL,
-  `mime_type` varchar(45) COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `name` varchar(45) COLLATE utf8_general_ci DEFAULT NULL,
+  `mime_type` varchar(45) COLLATE utf8_general_ci DEFAULT NULL,
   `blob` mediumblob NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_objects_events_idx` (`event_id`),
   CONSTRAINT `fk_objects-events` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
